@@ -1,6 +1,23 @@
 #include <stdio.h>
 
-int main() {
-    printf("Hello the2, world!\n");
+FILE* pre_assmbler(FILE*);
+int main(int argc, char *argv[]) {
+    int i=0;
+if(argc < 2) {
+   printf("error: no input file\n");
+    return 1;
+}
+while (i < argc)
+{
+   FILE *new_file = fopen(argv[i], "r");
+    if(new_file == NULL) 
+    {
+        printf("error: file not found\n");
+        return 1;
+    }
+    pre_assmbler(new_file);
+    i++;
+    fclose(new_file);
+}
     return 0;
 }
