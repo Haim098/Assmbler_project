@@ -2,19 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-
-typedef struct
-{
-    char name[100];  // TODO: fix the number in array 1
-    char value[100]; // TODO: fix the number in array 2
-} macros;
-macros macro[100]; // TODO: fix the number in array 4
-enum
+#include "types.h"
+//TODO: to chack if i need to ignore spaces between words
+enum //TODO: to put it in a header file
 {
     true = 1,
     false = 0
 };
+
 FILE *pre_assmbler(FILE *input)
 {
 
@@ -25,6 +20,7 @@ FILE *pre_assmbler(FILE *input)
     int i = 0;
     char ch;
     const int MAX_MACROS = 100; // Define constant for the maximum number of macros
+
     FILE *f_pre_ass = fopen("pre_assmbler.am", "w");
     if (f_pre_ass == NULL)
     {
@@ -36,6 +32,16 @@ FILE *pre_assmbler(FILE *input)
                         
         int j = 0;
         line_p = lint;
+         while (isspace(*line_p))
+        {
+              
+            line_p++;
+        }
+        if (*line_p == '\0' || *line_p == ';')
+        {
+              
+            continue;
+        }
         while (j < i) // Adjust loop condition to iterate over the correct range of macro elements
         {
             if (strncmp(macro[j].name, line_p, strlen(macro[j].name)) == 0)
@@ -53,34 +59,17 @@ FILE *pre_assmbler(FILE *input)
           
             if (strncmp(line_p, "endmcr", 6) == 0)
             {
-                printf(" im here");
                 flag = false;
                 i++;
                 continue;
             }
-            strcpy(macro[i].value, line_p);
-           /* line_p += strlen(line_p); // Move the pointer to the end of the line
-            if (*line_p != '\0') 
-            {
-                line_p++; // Move the pointer to the next line
-            }*/
-            continue;
-        }
-
-        while (isspace(*line_p))
-        {
-              
-            line_p++;
-        }
-        if (*line_p == '\0' || *line_p == ';')
-        {
-              
+            strcat(macro[i].value, line_p);
             continue;
         }
         if (*line_p == 'm' && *(line_p + 1) == 'c' && *(line_p + 2) == 'r')
         {
             flag = true;
-            line_p += 3;
+            line_p += 4;
             strcpy(macro[i].name, line_p);
             continue;
         }

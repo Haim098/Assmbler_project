@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 FILE* pre_assmbler(FILE*);
 int main(int argc, char *argv[]) {
     int i=0;
