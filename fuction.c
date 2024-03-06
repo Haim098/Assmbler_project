@@ -1,34 +1,128 @@
-#ifndef Fuction_h
-#define Fuction_h
-
-#include <string.h>
 #include <stdio.h>
-void paste(char *i, char *j);
-int main()
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "types.h"
+//TODO: to chack if i need to ignore spaces between words
+enum //TODO: to put it in a header file
 {
-    char *i;
-    char *j;
-    i="hello";
-    j=" world";
-    paste(i,j);
-    printf("%s",i);
-    return 0;
-}
+    true = 1,
+    false = 0
+};
 
-void paste(char *i, char *j)
+FILE *pre_assmbler(FILE *input)
 {
-   while(*j != '\0' ||*j!= '\n')
+
+    char lint[80];      // TODO: define a constant
+    char mcr[100][100]; // TODO: fix the number in array 3
+    char *line_p;
+    int flag = false;
+    int i = 0;
+    char ch;
+    const int MAX_MACROS = 100; // Define constant for the maximum number of macros
+   macro_tabel *tabel = malloc(sizeof(macro_tabel)+1);
+    if (tabel==NULL)
     {
-        if (*j==' ' && *(j+1)==' ')
+        printf("error: cannot create macro2\n");
+        exit(1);
+    }
+   // char size_of_m=sizeof(tabel[i].m->value);
+    FILE *f_pre_ass = fopen("pre_assmbler.am", "w");
+    if (f_pre_ass == NULL)
+    {
+        printf("error: cannot create pre_assmbler file\n");
+        exit(1);
+    }
+    while (fgets(lint, 80, input) != NULL)
+    {
+                        
+        int j = 0;
+        line_p = lint;
+         while (isspace(*line_p))
         {
-            j++;
+              
+            line_p++;
+        }
+        if (*line_p == '\0' || *line_p == ';')
+        {
+              
             continue;
         }
-    *i = *j;
-    i++;
-    j++;
+        while (j < i) // Adjust loop condition to iterate over the correct range of macro elements
+        {
+            if (strncmp(tabel[i].m->name,line_p,strlen(tabel[i].m->name)) == 0)
+            {                
+                line_p = tabel[i].m->value;
+                break;
+            }
+            j++;
+        }
+
+        if (flag==true)
+        {
+            if (strncmp(line_p, "endmcr", 6) == 0)
+            {
+                flag = false;
+                i++;
+                continue;
+            }
+            if(!tabel[i].m->value)
+                tabel[i].m= create_macros2(tabel[i].m->name, line_p);
+            else
+            {
+               size_t size_of_m= strlen(tabel[i].m->value);
+                tabel[i].m->value=realloc(tabel[i].m->value, size_of_m+strlen(line_p)+1);
+                if (tabel[i].m->value==NULL)
+                {
+                    printf("error: cannot create macro2\n");
+                    exit(1);
+                }
+                strcat(tabel[i].m->value, line_p);
+            }
+            continue;
+        }
+       
+        if (*line_p == 'm' && *(line_p + 1) == 'c' && *(line_p + 2) == 'r')
+        {
+            flag = true;
+            line_p += 4;
+            tabel= realloc(tabel,(sizeof(tabel)*i)+1);
+            if (tabel==NULL)
+            {
+                printf("error: cannot create macro2\n");
+                exit(1);
+            }
+            tabel[i].m= create_macros2(line_p, NULL);
+            continue;
+        }
+        fprintf(f_pre_ass, "%s", line_p);
+    
+    }
+    
+
+fclose(f_pre_ass);
+
+f_pre_ass = fopen("pre_assmbler.am", "r");
+if (f_pre_ass == NULL)
+{
+    printf("error: cannot open pre_assmbler file\n");
+    exit(1);
 }
-}
+/*i--;
+while (i>=0)
+{
+    free_macros2(tabel[i].m);
+    i--;  
+}*/
 
 
-#endif
+    while ((ch=fgetc(f_pre_ass))!=EOF)//TODO to delte this print
+    {
+       
+        printf("%c",ch);
+    }
+    fclose(f_pre_ass);
+
+    return f_pre_ass;
+}
+

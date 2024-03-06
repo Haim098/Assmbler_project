@@ -9,7 +9,6 @@ enum //TODO: to put it in a header file
     true = 1,
     false = 0
 };
-
 FILE *pre_assmbler(FILE *input)
 {
 
@@ -21,6 +20,8 @@ FILE *pre_assmbler(FILE *input)
     char ch;
     const int MAX_MACROS = 100; // Define constant for the maximum number of macros
 
+
+    
     FILE *f_pre_ass = fopen("pre_assmbler.am", "w");
     if (f_pre_ass == NULL)
     {
@@ -44,10 +45,10 @@ FILE *pre_assmbler(FILE *input)
         }
         while (j < i) // Adjust loop condition to iterate over the correct range of macro elements
         {
-            if (strncmp(macro[j].name, line_p, strlen(macro[j].name)) == 0)
+            if (strncmp(macro2[j].name, line_p, strlen(macro2[j].name)) == 0)
             {
                                 
-                line_p = macro[j].value;
+                line_p = macro2[j].value;
                 break;
             }
             j++;
@@ -63,14 +64,14 @@ FILE *pre_assmbler(FILE *input)
                 i++;
                 continue;
             }
-            strcat(macro[i].value, line_p);
+            strcat(macro2[i].value, line_p);
             continue;
         }
         if (*line_p == 'm' && *(line_p + 1) == 'c' && *(line_p + 2) == 'r')
         {
             flag = true;
             line_p += 4;
-            strcpy(macro[i].name, line_p);
+            strcpy(macro2[i].name, line_p);
             continue;
         }
 
