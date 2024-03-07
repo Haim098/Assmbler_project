@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     }
     while (i < argc)
     {
-        printf("%d\n",i);
         FILE *new_file = fopen(argv[i], "r");
         if(new_file == NULL) 
         {
