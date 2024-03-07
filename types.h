@@ -28,8 +28,30 @@ macros2 *create_macros2(const char *name, const char *value) {
         fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-    m->name = strdup(name);
-    m->value = strdup(value);
+    
+    if ((m->value)==NULL && value!=NULL)
+       { 
+        m->value=(char*)malloc(strlen(value)+1);
+        if (m->value==NULL)
+            printf("error: cannot reallocate memory for macro value\n");
+                    exit(1);
+        }
+        else if(m->value!=NULL)
+        {
+            size_t size=0;
+            size +=strlen(m->value);
+            char* temp=realloc(m->value,size+strlen(value)+1);
+        if (temp==NULL)
+        {
+               printf("error: cannot reallocate memory for macro value\n");
+                    exit(1);
+        }
+        m->value=temp;
+        }
+    if(name!=NULL)
+        m->name = strdup(name);
+    if(value!=NULL)
+        strcat(m->value, value);
     return m;
 }
 
