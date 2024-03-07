@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "types.h"
+#define MAX_IN_LINE 80
 //TODO: to chack if i need to ignore spaces between words
 enum //TODO: to put it in a header file
 {
@@ -13,20 +14,19 @@ enum //TODO: to put it in a header file
 FILE *pre_assmbler(FILE *input)
 {
 
-    char lint[80];      // TODO: define a constant
-    char mcr[100][100]; // TODO: fix the number in array 3
+    char lint[MAX_IN_LINE];      // TODO: define a constant
     char *line_p;
     int flag = false;
     int i = 0;
     char ch;
     const int MAX_MACROS = 100;
-     size_t size_of_m; // Define constant for the maximum number of macros
-macro_tabel *tabel = malloc(sizeof(macro_tabel) + 1);
-if (tabel == NULL)
-{
+    size_t size_of_m; // Define constant for the maximum number of macros
+    macro_tabel *tabel = malloc(sizeof(macro_tabel) + 1);
+    if (tabel == NULL)
+    {
     printf("error: cannot allocate memory for macro table\n");
     exit(1);
-}
+    }
     
    // char size_of_m=sizeof(tabel[i].m->value);
     FILE *f_pre_ass = fopen("pre_assmbler.am", "w");
@@ -35,7 +35,7 @@ if (tabel == NULL)
         printf("error: cannot create pre_assmbler file\n");
         exit(1);
     }
-    while (fgets(lint, 80, input) != NULL)
+    while (fgets(lint, MAX_IN_LINE, input) != NULL)
     {               
         int j = 0;
         line_p = lint;
@@ -75,6 +75,7 @@ if (tabel == NULL)
                     printf("error: cannot allocate memory for macro value\n");
                     exit(1);
                 }
+                tabel[i].m->value[0] = '\0';
             }
             else
             {
@@ -86,6 +87,8 @@ if (tabel == NULL)
                     exit(1);
                 }
                 tabel[i].m->value = temp;
+                tabel[i].m->value[size] = '\0'; // null-terminate the newly allocated memory
+
             }
             strcat(tabel[i].m->value, line_p);
 
