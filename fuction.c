@@ -52,8 +52,8 @@ if (tabel == NULL)
         while (j < i) // Adjust loop condition to iterate over the correct range of macro elements
         {
             if (strncmp(tabel[j].m->name,line_p,strlen(tabel[j].m->name)) == 0)
-            {       
-                line_p=(line_p,tabel[i].m->name,tabel[i].m->value);
+            {   
+                line_p=(line_p,tabel[j].m->name,tabel[j].m->value);
                 break;
             }
             j++;
@@ -67,29 +67,30 @@ if (tabel == NULL)
                 i++;
                 continue;
             }
-            if (tabel[i].m->value==NULL)
+            if (tabel[i].m->value == NULL)
             {
-                tabel[i].m->value=(char*)malloc(strlen(line_p)+1);
-                if (tabel[i].m->value==NULL)
+                tabel[i].m->value = (char*)malloc(strlen(line_p) + 1);
+                if (tabel[i].m->value == NULL)
                 {
-                    printf("error: cannot reallocate memory for macro value\n");
+                    printf("error: cannot allocate memory for macro value\n");
                     exit(1);
                 }
             }
             else
             {
-                size_t size=0;
-                size +=strlen(tabel[i].m->value);
-                char* temp=realloc(tabel[i].m->value,size+strlen(line_p)+1);
-                if (temp==NULL)
+                size_t size = strlen(tabel[i].m->value);
+                char* temp = realloc(tabel[i].m->value, size + strlen(line_p) + 1);
+                if (temp == NULL)
                 {
                     printf("error: cannot reallocate memory for macro value\n");
                     exit(1);
                 }
-                tabel[i].m->value=temp;
+                tabel[i].m->value = temp;
             }
-            tabel[i].m->value[strlen(tabel[i].m->value)] = '\0'; 
             strcat(tabel[i].m->value, line_p);
+
+
+            
             continue;
         }
        
