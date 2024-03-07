@@ -10,6 +10,7 @@ c project creat a new c projact
 2. open Terminal for Linux or CMD for Windows in the folder
     (you can use the 'cd' command in Linux and Win to navigate to your foldr e.g: cd home/usr/user/your_folder)
 3. Clone the project use the git clone command in the Terminal you open:
+## Copy Me
 git clone https://github.com/Haim098/Assmbler_project
 
 
