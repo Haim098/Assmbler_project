@@ -15,7 +15,7 @@ git clone https://github.com/Haim098/Assmbler_project
 ```
 > Now you have the git repository in your local machine
 
-# Basic git commands
+# Basic git bash commands
 > To save your changes locally use the commit command
 ```
 git commit -m "your massege"
@@ -33,4 +33,5 @@ git pull
 git checkout origin\<type your branch>
 ```
 
+# Pull-Requests(PR) & Marge 
 
