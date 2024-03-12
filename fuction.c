@@ -5,7 +5,7 @@
 #include "types.h"
 #define MAX_IN_LINE 80
 //TODO: to chack if i need to ignore spaces between words
-enum //TODO: to put it in a header file
+enum Boolean//TODO: to put it in a header file
 {
     true = 1,
     false = 0
@@ -147,5 +147,6 @@ i--;
     fclose(f_pre_ass);
 
     return f_pre_ass;
+
 }
 
